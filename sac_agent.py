@@ -205,7 +205,7 @@ class sac_agent:
                 # input the action into the environment
                 obs_, reward, done, info = self.eval_env.step(self.action_max * action)
                 episode_reward += reward
-                success_flag = True if info['success'] else False
+                success_flag = success_flag or info['success']
                 if done:
                     break
                 obs = obs_
