@@ -95,8 +95,8 @@ class sac_agent:
             if t % self.args.display_interval == 0:
                 # start to do the evaluation
                 mean_rewards, mean_success = self._evaluate_agent()
-                print('[{}] Frames: {}, Rewards: {:.3f}, Success: {:.3f}, T_Reward: {:.3f}, T_Success: {:.3f}, QF1: {:.3f}, QF2: {:.3f}, AL: {:.3f}, Alpha: {:.3f}, AlphaL: {:.3f}'.format(datetime.now(), \
-                        t, mean_rewards, mean_success, self.reward_recorder.mean, self.success_recorder.mean, qf1_loss, qf2_loss, actor_loss, alpha, alpha_loss))
+                print('[{}] Frames: {}, Rewards: {:.3f}, Success: {:.3f}, T_Reward: {:.3f}, QF1: {:.3f}, QF2: {:.3f}, AL: {:.3f}, Alpha: {:.3f}, AlphaL: {:.3f}'.format(datetime.now(), \
+                        t, mean_rewards, mean_success, self.reward_recorder.mean, qf1_loss, qf2_loss, actor_loss, alpha, alpha_loss))
                 # save models
                 torch.save(self.actor_net.state_dict(), self.model_path + '/model.pt' if self.args.random_init else self.model_path + '/fixed_model.pt')
                 if mean_success == 1:
@@ -195,6 +195,7 @@ class sac_agent:
         for _ in range(self.args.eval_episodes):
             obs = self.eval_env.reset()
             episode_reward = 0 
+            success_flag = False
             while True:
                 with torch.no_grad():
                     obs_tensor = self._get_tensor_inputs(obs)
@@ -204,9 +205,10 @@ class sac_agent:
                 # input the action into the environment
                 obs_, reward, done, info = self.eval_env.step(self.action_max * action)
                 episode_reward += reward
+                success_flag = True if info['success'] else False
                 if done:
                     break
                 obs = obs_
             total_reward += episode_reward
-            total_success += info['success']
+            total_success += 1 if success_flag else 0
         return total_reward / self.args.eval_episodes, total_success / self.args.eval_episodes
