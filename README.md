@@ -17,3 +17,6 @@ Download pretrained models from [here](https://drive.google.com/file/d/19zdmws5r
 ```
 python demo.py --env-name='pick_place' --render
 ```
+## Results
+**Note**: the result is ploted by using 5 random seeds and using smooth function to make plot look better (the success rate of `pick_place` is nearly binary: 0 or 1). 
+![results](figures/results.png)
