@@ -12,6 +12,11 @@ git checkout 2361d353d0895d5908156aec71341d4ad09dd3c2
 pip install -e .
 ```
 
+## Train the agent
+```
+python train_network.py --cuda --env-name='pick_place' --total-timesteps=1500000
+```
+
 ## Demo
 Download pretrained models from [here](https://drive.google.com/file/d/19zdmws5rFrH_2KjAl4GnwrtpeBxgwPIG/view?usp=sharing).
 ```
